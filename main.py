@@ -1,19 +1,16 @@
-from random import choice
 from random import randint
 import sys
-import os
-import sqlite3
 
 from PyQt5 import uic
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QMessageBox, QLineEdit, QInputDialog, QTableWidgetItem
+from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QPainter, QColor
+from UI import Ui_Form
 
 
-class Circles(QWidget):
+class Circles(QWidget, Ui_Form):
     def __init__(self):
         super().__init__()
-        uic.loadUi('UI.ui', self)
+        self.setupUi(self)
         self.button.clicked.connect(self.paint)
         self.circles = []
         self.do_paint = False
@@ -25,7 +22,8 @@ class Circles(QWidget):
     def paintEvent(self, event):
         if self.do_paint:
             x, y, w = randint(0, 450), randint(0, 300), randint(20, 100)
-            self.circles.append([x, y, w])
+            r, g, b = randint(0, 255), randint(0, 255), randint(0, 255)
+            self.circles.append([x, y, w, (r, g, b)])
             qp = QPainter()
             qp.begin(self)
             self.drawer(qp)
@@ -35,7 +33,7 @@ class Circles(QWidget):
     def drawer(self, qp):
         for elem in self.circles:
             print(elem)
-            qp.setBrush(QColor(255, 255, 0))
+            qp.setBrush(QColor(elem[3][0], elem[3][1], elem[3][2]))
             qp.drawEllipse(elem[0], elem[1], elem[2], elem[2])
 
 
